@@ -1,0 +1,68 @@
+name: test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  launcher-smoke-test:
+    name: Launcher smoke test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: launcher
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: launcher/requirements_launcher.txt
+
+      - name: Install launcher dependencies
+        run: python -m pip install -r requirements_launcher.txt
+
+      - name: Check Python syntax
+        working-directory: .
+        run: python -m compileall -q launcher bact_ai particles suspension
+
+      - name: Smoke test launcher routes and registered projects
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+
+          launcher_file = Path("app.py").resolve()
+          spec = importlib.util.spec_from_file_location("launcher_app", launcher_file)
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+
+          client = module.app.test_client()
+          response = client.get("/")
+          assert response.status_code == 200, response.status_code
+          assert b"GestBact AI" in response.data
+
+          missing = client.get("/iniciar/no-existe")
+          assert missing.status_code == 404, missing.status_code
+          assert missing.get_json()["ok"] is False
+
+          for project_id, project in module.PROYECTOS.items():
+              script = project["script"]
+              if script is None:
+                  continue
+              script_path = Path(module.BASE_DIR, script)
+              assert script_path.is_file(), f"{project_id}: falta {script_path}"
+              response = client.get(f"/estado/{project_id}")
+              assert response.status_code == 200, (project_id, response.status_code)
+              assert response.get_json() == {"activo": False}
+
+          print("Launcher routes and registered project scripts are OK.")
+          PY
