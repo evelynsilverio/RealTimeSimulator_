@@ -51,18 +51,18 @@ AUTOR = {
 PROYECTOS = {
     "bact_ai": {
         "nombre":      "GestBact AI",
-        "descripcion": "Simulador de bacterias con 5 factores científicos controlados por gestos de mano.",
+        "descripcion": "Simulador de bacterias con factores científicos controlados por gestos de mano.",
         "visual":      "bacteria",
         "tags":        ["Pygame", "MediaPipe", "EDO logística"],
-        "script":      "bact_ai/main.py",          # relativo a BASE_DIR
-        "cwd":         "bact_ai",                  # relativo a BASE_DIR  ← IMPORTANTE
+        "script":      "bact_ai/main.py",
+        "cwd":         "bact_ai",
     },
     "proyecto2": {
         "nombre":      "Suspensión",
-        "descripcion": "Simulación de un sistema de suspensión masa resorte amortiguador en tiempo real.",
+        "descripcion": "Simulación de un sistema de suspensión masa-resorte-amortiguador en tiempo real.",
         "visual":      "wave",
         "tags":        ["OpenCV", "Sliders en vivo", "2do orden"],
-        "script":      "suspension/main.py",       # None = aún no disponible
+        "script":      "suspension/main.py",
         "cwd":         None,
     },
     "proyecto3": {
