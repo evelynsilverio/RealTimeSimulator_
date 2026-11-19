@@ -59,7 +59,7 @@ PROYECTOS = {
     },
     "proyecto2": {
         "nombre":      "Suspensión",
-        "descripcion": "Simulación de un sistema de suspensión masa-resorte-amortiguador en tiempo real.",
+        "descripcion": "Simulación de un sistema de suspensión masa, resorte y amortiguador en tiempo real.",
         "visual":      "wave",
         "tags":        ["OpenCV", "Sliders en vivo", "2do orden"],
         "script":      "suspension/main.py",
